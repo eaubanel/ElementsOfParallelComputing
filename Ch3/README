@@ -1,0 +1,8 @@
+Implementations of selected algorithms from Chapter 3
+Questions/bugs: aubanel@unb.ca
+
+Algorithm 3.1	kmeans.c
+Data set for Fig. 3.7	kmeansEg.txt	
+Algorithms 3.2 and 3.3 (fixes bug in 3.3)	mergeSort.c
+Algorithm 3.5 gameOfLife.c
+Algorithm 3.6	subsetSum.c
