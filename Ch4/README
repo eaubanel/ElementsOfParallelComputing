@@ -1,0 +1,7 @@
+Implementations of selected algorithms from Chapter 4
+Questions/bugs: aubanel@unb.ca
+
+Algorithm 4.1	matVecRowCilkSIMD.c
+Algorithm 4.2	reductionCilkSIMD.c
+Algorithm 4.3	matVecColCilkSIMD.c
+Subset sum from section 4.2	subsetSumCilkSIMD.c
