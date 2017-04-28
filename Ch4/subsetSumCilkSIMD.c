@@ -32,14 +32,13 @@ int main(int argc, char **argv){
 	int S; // target sum = nR/4
 	int *s; // set of points (starts at index 1)
 	char *Fs; // Dynamic programming table (sequential)
-	char *F; // Dynamic programming table
+	int *F; // Dynamic programming table
 
 	struct timespec tstart,tend; 
   float timer;
 
 	if(argc < 3){
 		fprintf(stderr,"usage: %s R n [seed]\n", argv[0]);
-
 		return 1;
 	}
 	R = strtol(argv[1], NULL, 10);
@@ -48,7 +47,7 @@ int main(int argc, char **argv){
   int m = S+1;
   s = malloc((n+1)*sizeof(int));
   Fs = calloc((n+1)*m,sizeof(char));
-  F = calloc((n+1)*m,sizeof(char));
+  F = calloc((n+1)*m,sizeof(int));
 	if(!s || !F || !Fs){
 		fprintf(stderr,"couldn't allocate memory\n");
 		return 1;

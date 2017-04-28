@@ -5,3 +5,6 @@ Algorithm 4.1	matVecRowCilkSIMD.c
 Algorithm 4.2	reductionCilkSIMD.c
 Algorithm 4.3	matVecColCilkSIMD.c
 Subset sum from section 4.2	subsetSumCilkSIMD.c
+Algorithm 4.4	piEstimate.c
+Algorithm 4.5	piForkJoin.c
+Algorithm 4.6	mergeSortForkJoin.c

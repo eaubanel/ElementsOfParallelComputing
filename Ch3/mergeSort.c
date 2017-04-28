@@ -58,6 +58,8 @@ int main(int argc, char **argv){
 
 	for(int i=0; i<n; i++)
 		printf("%d\n", b[i]);
+
+	return 0;
 }
 
 void mergeSort(int *a, int lower, int upper, int *b){
