@@ -8,3 +8,8 @@ Subset sum from section 4.2	subsetSumCilkSIMD.c
 Algorithm 4.4	piEstimate.c
 Algorithm 4.5	piForkJoin.c
 Algorithm 4.6	mergeSortForkJoin.c
+Algorithm 4.7	fractalOMP.c
+Subset sum from Section 4.4	subsetSumOMP.c
+Algorithm 4.9	removeDuplicatesOMP.c
+Algorithm 4.10	piOMP.c
+Algorithm 4.10 version 2	piOMPReduction.c
