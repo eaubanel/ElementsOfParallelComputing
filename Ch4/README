@@ -13,3 +13,8 @@ Subset sum from Section 4.4	subsetSumOMP.c
 Algorithm 4.9	removeDuplicatesOMP.c
 Algorithm 4.10	piOMP.c
 Algorithm 4.10 version 2	piOMPReduction.c
+Algorithm 4.12	fractalOMPSPMD.c
+Algorithm 4.13	mergeSortOMPSPMD.c
+Algorithm 4.14	reductionCUDA.cu
+Algorithm 4.14	reductionGPU.pdf
+Algorithm 4.15	fractalOMPMW.c
