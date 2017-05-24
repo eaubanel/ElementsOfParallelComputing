@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
+#include <time.h>
 
 void updateGrid(char **grid, char **newGrid, int n);
 void display(char **grid, int n);

@@ -103,7 +103,7 @@ int main(int argc, char **argv){
 	//verify
 	int passed = 1;
 	for(int i=2;i<=n;i++){
-    for(int j=1; j<s[i];j++){
+    for(int j=1; j<=S;j++){
 			if((F[i*m+j] && !Fs[i*m+j]) || (!F[i*m+j] && Fs[i*m+j])){
 				printf("i=%d, j=%d, F=%d, Fs=%d\n", i, j, F[i*m+j], Fs[i*m+j]);
 				passed = 0;

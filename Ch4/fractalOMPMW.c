@@ -33,7 +33,7 @@ int main(int argc, char **argv){
   float len=3.0; //len^2 is area of picture
   float xmin=-1.5, ymin=-1.5;
   float ymax = ymin+len;
-	char *count; //image stored in 1D array
+	unsigned char *count; //image stored in 1D array
 	struct timespec tstart,tend; 
   float time;
   
