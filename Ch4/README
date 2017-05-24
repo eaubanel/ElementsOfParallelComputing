@@ -18,3 +18,7 @@ Algorithm 4.13	mergeSortOMPSPMD.c
 Algorithm 4.14	reductionCUDA.cu
 Algorithm 4.14	reductionGPU.pdf
 Algorithm 4.15	fractalOMPMW.c
+Algorithm 4.16	gameOfLifeMPI.c
+Algorithm 4.17	matVecRowMPI.c
+Algorithm 4.18 (fixes bug)	matVec2DMPI.c
+Algorithms 4.19 and 4.20 (fixes bug in 4.19)	subsetSumMPI.c
