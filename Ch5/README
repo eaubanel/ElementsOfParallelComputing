@@ -1,0 +1,7 @@
+Implementations of selected algorithms from Chapter 5
+Questions/bugs: aubanel@unb.ca
+
+Algorithm 5.1 (with Hillis & Steele scan; fixes bug)	scanSPMDHS.c
+Algorithm 5.1 (with Blelloch scan; fixes bug)	scanSPMDBlelloch.c
+Algorithm 5.3	gameOfLifeMPIV2.c
+Algorithm 5.4	gameOfLifeMPIV3.c

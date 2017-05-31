@@ -1,5 +1,5 @@
 /* Copyright 2017 Eric Aubanel
- * This file contains code implementing Algorithm  4.16 from
+ * This file contains code implementing Algorithm  5.3 from
  * Elements of Parallel Computing, by Eric Aubanel, 2016, CRC Press.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,11 +17,11 @@
  *
  * -------------------------------------------------------------------
  * Parallel MPI implementation of Conway's Game of Life, with periodic
- * boundary conditions. 
+ * boundary conditions, and extra layer of ghost cells.
  * Also includes initialization and display of grid.
  * Assumes number of rows (n) divisible by number of processors (p).
- * Process 0 has entire grid, plus one ghost row (first row).
- * Other processes have grid with n/p + 2 rows (includes 2 ghost rows).
+ * Process 0 has entire grid, plus two ghost rows (first row).
+ * Other processes have grid with n/p + 4 rows (includes 4 ghost rows).
  * If DISPLAY defined, displays grid after every DISP_FREQ generations,
  * otherwise only displays initial and final grids.
  * Grid diplayed by gathering it from all processes, then 
@@ -33,8 +33,9 @@
 #include <time.h>
 #include "mpi.h"
 
-//update grid, store results in newGrid, for m rows and n columns
-void updateGrid(char **grid, char **newGrid, int m, int n);
+//update grid, store results in newGrid, for m+2 rows (start=0) or 
+//m rows (start=1), and n columns
+void updateGrid(char **grid, char **newGrid, int start, int m, int n);
 //writes entire grid to file f
 void display(FILE *f, char **grid, int n);
 //called by process 0 to initialize grid with random values
@@ -82,20 +83,20 @@ int main(int argc, char **argv){
 			seed = -1;
 		grid = initialize(seed, n);
 	} else{
-		 grid = allocate2D(m+2, n);
+			grid = allocate2D(m+4, n);
 	}
 	if(grid == NULL){
 			if(!id) fprintf(stderr,"couldn't allocate memory for grid\n");
 			MPI_Finalize();
 	}
 
-	MPI_Scatter(&grid[1][0], m*n, MPI_CHAR, &grid[1][0], m*n, MPI_CHAR,
+	MPI_Scatter(&grid[2][0], m*n, MPI_CHAR, &grid[2][0], m*n, MPI_CHAR,
 							0, MPI_COMM_WORLD);
 
 	if(!id)
-		newGrid = allocate2D(n+1, n);
+		newGrid = allocate2D(n+2, n);
 	else
-		newGrid = allocate2D(m+2, n);
+		newGrid = allocate2D(m+4, n);
 	if(newGrid == NULL){
 		if(!id) fprintf(stderr,"couldn't allocate memory for newGrid\n");
 		MPI_Finalize();
@@ -115,24 +116,26 @@ int main(int argc, char **argv){
 	MPI_Barrier(MPI_COMM_WORLD);
 	time = -MPI_Wtime();
 	for(int k=0; k<ngen; k++){
-		//exhange boundary values
-		MPI_Isend(&grid[m][0], n, MPI_CHAR, nbDown, 1, 
-						MPI_COMM_WORLD, &req_send_down);
-		MPI_Isend(&grid[1][0], n, MPI_CHAR, nbUp, 2, 
-						MPI_COMM_WORLD, &req_send_up);
-		MPI_Recv(&grid[m+1][0], n, MPI_CHAR, nbDown, 2, 
-						MPI_COMM_WORLD, &status);
-		MPI_Recv(&grid[0][0], n, MPI_CHAR, nbUp, 1, 
-						MPI_COMM_WORLD, &status);
-
-		updateGrid(grid, newGrid, m, n);
+		int offset = k%2;
+		if(!offset){
+			//exhange boundary values
+			MPI_Isend(&grid[m][0], 2*n, MPI_CHAR, nbDown, 1, 
+							MPI_COMM_WORLD, &req_send_down);
+			MPI_Isend(&grid[2][0], 2*n, MPI_CHAR, nbUp, 2, 
+							MPI_COMM_WORLD, &req_send_up);
+			MPI_Recv(&grid[m+2][0], 2*n, MPI_CHAR, nbDown, 2, 
+							MPI_COMM_WORLD, &status);
+			MPI_Recv(&grid[0][0], 2*n, MPI_CHAR, nbUp, 1, 
+							MPI_COMM_WORLD, &status);
+		}
+		updateGrid(grid, newGrid, offset, m, n);
 		char ** temp = grid;
 		grid = newGrid;
 		newGrid = temp;
 
 		#ifdef DISPLAY
 		if(!id && k % DISP_FREQ == 0){
-			MPI_Gather(&grid[1][0], m*n, MPI_CHAR, &grid[1][0], m*n, MPI_CHAR,
+			MPI_Gather(&grid[2][0], m*n, MPI_CHAR, &grid[2][0], m*n, MPI_CHAR,
 								0, MPI_COMM_WORLD);
 		
 			display(f, grid, n);
@@ -144,7 +147,7 @@ int main(int argc, char **argv){
 	MPI_Reduce(&time, &ptime, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 	if(!id)
 		printf("time in seconds: %f\n\n", ptime);
-	MPI_Gather(&grid[1][0], m*n, MPI_CHAR, &grid[1][0], m*n, MPI_CHAR,
+	MPI_Gather(&grid[2][0], m*n, MPI_CHAR, &grid[2][0], m*n, MPI_CHAR,
 						0, MPI_COMM_WORLD);
 	if(!id)
 		display(f, grid, n);
@@ -152,8 +155,8 @@ int main(int argc, char **argv){
 	return 0;
 }
 
-void updateGrid(char **grid, char **newGrid, int m, int n){
-	for(int i=1; i<=m; i++)
+void updateGrid(char **grid, char **newGrid, int start, int m, int n){
+	for(int i=1+start; i<=m+2-start; i++)
 		for(int j=0; j<n; j++){
 			int up = i-1;
 			int down = i+1;
@@ -172,7 +175,7 @@ void updateGrid(char **grid, char **newGrid, int m, int n){
 }
 
 void display(FILE *f, char **grid, int n){
-	for(int i=1; i<=n; i++){
+	for(int i=2; i<n+2; i++){
 		for(int j=0; j<n; j++){
 			char alive = 'o';
 			char dead = '.';
@@ -183,7 +186,7 @@ void display(FILE *f, char **grid, int n){
 }
 
 char **initialize(int seed, int n){
-	int nrows = 1+n;
+	int nrows = 2+n;
 	char *temp = calloc(nrows*n, sizeof(char));
 	char **grid = malloc(nrows*sizeof(char *));
 	if(!temp || !grid)
@@ -192,8 +195,8 @@ char **initialize(int seed, int n){
 		srand(time(NULL));
 	else
 		srand(seed);
-	//leave first row blank (ghost row)
-	for(int i=n; i<nrows*n; i++)
+	//leave first two rows blank (ghost rows)
+	for(int i=2*n; i<nrows*n; i++)
 		if(rand() > RAND_MAX/2)
 			temp[i] = 1;
 	for(int i=0; i<nrows; i++)

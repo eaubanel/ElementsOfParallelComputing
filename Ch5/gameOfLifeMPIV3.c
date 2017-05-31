@@ -1,5 +1,5 @@
 /* Copyright 2017 Eric Aubanel
- * This file contains code implementing Algorithm  4.16 from
+ * This file contains code implementing Algorithm  5.4 from
  * Elements of Parallel Computing, by Eric Aubanel, 2016, CRC Press.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  *
  * -------------------------------------------------------------------
  * Parallel MPI implementation of Conway's Game of Life, with periodic
- * boundary conditions. 
+ * boundary conditions, and overlap of computation and communication. 
  * Also includes initialization and display of grid.
  * Assumes number of rows (n) divisible by number of processors (p).
  * Process 0 has entire grid, plus one ghost row (first row).
@@ -33,8 +33,8 @@
 #include <time.h>
 #include "mpi.h"
 
-//update grid, store results in newGrid, for m rows and n columns
-void updateGrid(char **grid, char **newGrid, int m, int n);
+//update grid, store results in newGrid, for rows start to end, and n columns
+void updateGrid(char **grid, char **newGrid, int start, int end, int m, int n);
 //writes entire grid to file f
 void display(FILE *f, char **grid, int n);
 //called by process 0 to initialize grid with random values
@@ -120,12 +120,16 @@ int main(int argc, char **argv){
 						MPI_COMM_WORLD, &req_send_down);
 		MPI_Isend(&grid[1][0], n, MPI_CHAR, nbUp, 2, 
 						MPI_COMM_WORLD, &req_send_up);
+
+		updateGrid(grid, newGrid, 2, m-1, m, n);
+
 		MPI_Recv(&grid[m+1][0], n, MPI_CHAR, nbDown, 2, 
 						MPI_COMM_WORLD, &status);
 		MPI_Recv(&grid[0][0], n, MPI_CHAR, nbUp, 1, 
 						MPI_COMM_WORLD, &status);
 
-		updateGrid(grid, newGrid, m, n);
+		updateGrid(grid, newGrid, 1, 1, m, n);
+		updateGrid(grid, newGrid, m, m, m, n);
 		char ** temp = grid;
 		grid = newGrid;
 		newGrid = temp;
@@ -152,8 +156,8 @@ int main(int argc, char **argv){
 	return 0;
 }
 
-void updateGrid(char **grid, char **newGrid, int m, int n){
-	for(int i=1; i<=m; i++)
+void updateGrid(char **grid, char **newGrid, int start, int end, int m, int n){
+	for(int i=start; i<=end; i++)
 		for(int j=0; j<n; j++){
 			int up = i-1;
 			int down = i+1;
