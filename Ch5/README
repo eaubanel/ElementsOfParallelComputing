@@ -1,7 +1,10 @@
-Implementations of selected algorithms from Chapter 5
+Implementations of selected algorithms and presentation slides from Chapter 5
 Questions/bugs: aubanel@unb.ca
 
 Algorithm 5.1 (with Hillis & Steele scan; fixes bug)	scanSPMDHS.c
 Algorithm 5.1 (with Blelloch scan; fixes bug)	scanSPMDBlelloch.c
 Algorithm 5.3	gameOfLifeMPIV2.c
 Algorithm 5.4	gameOfLifeMPIV3.c
+Slides for Section 5.1, 5.2: perfAnalysis.pdf
+Slides for Section 5.3:	performanceBarriers.pdf
+Slides for Section 5.4:	performanceReporting.pdf

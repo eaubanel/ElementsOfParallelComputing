@@ -1,4 +1,4 @@
-Implementations of selected algorithms from Chapter 4
+Implementations of selected algorithms and presentation slides from Chapter 4
 Questions/bugs: aubanel@unb.ca
 
 Algorithm 4.1	matVecRowCilkSIMD.c
@@ -22,3 +22,8 @@ Algorithm 4.16	gameOfLifeMPI.c
 Algorithm 4.17	matVecRowMPI.c
 Algorithm 4.18 (fixes bug)	matVec2DMPI.c
 Algorithms 4.19 and 4.20 (fixes bug in 4.19)	subsetSumMPI.c
+Slides for Sections 4.1-4.3	programStruc1.pdf
+Slides for Sections 4.4, 4.5	programStruc2.pdf
+Slides for Section 4.6	programStruc3.pdf
+Slides for Sections 4.7-4.8.2	programStruc4.pdf
+Slides for Sections 4.8.3	programStruc5.pdf
