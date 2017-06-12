@@ -9,8 +9,8 @@ For more implementation details on the parallel algorithms, please refer to the 
 research papers cited in the text.
 
 2. Dijkstra's algorithm requires an indexed min priority queue. My code uses a separate 
-module for the priority queue (indexedMinPQ.h), which I have not included since I adapted 
-it from the indexed max priority queue in Sedgewick's Algorithms in C, 3rd edition.
+module for the priority queue (indexedMinPQ.h), whose implementation I have not included 
+since I adapted it from the indexed max priority queue in Sedgewick's Algorithms in C, 3rd edition.
 
 Algorithm 6.1 (Bellman-Ford version)	ssspBF.c
 Algorithm 6.1 (Dijkstra version)	ssspD.c

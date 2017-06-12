@@ -4,7 +4,7 @@
 #ifndef INDEXEDMINPQ_H
 #define INDEXEDMINPQ_H
 //Ptype must be primitive type
-typedef int Ptype;
+typedef double Ptype;
 // initialize heap of max size m, 
 // which indexes into items array of lenth n
 void minHeapInit(Ptype *items, int n, int m);
