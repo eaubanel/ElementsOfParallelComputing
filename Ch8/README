@@ -1,0 +1,13 @@
+Implementations of selected algorithms and presentation slides from Chapter 8
+Questions/bugs: aubanel@unb.ca
+
+NOTE:
+I have only included implementations of the sequential QuickHull, MergeHull and 
+Graham Scan algorithms, in the interest of leaving the parallel implementations 
+for student projects. For more implementation details on the parallel algorithms, 
+please refer to the original research papers cited in the text.
+
+Algorithm 8.1	quickHull.c
+Algorithm 8.2	mergeHull.c
+Algorithm 8.3	grahamScan.c
+Slides for Sections 8.1, 8.2, 8.3.2	convexHull.pdf
